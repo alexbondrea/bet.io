@@ -4,6 +4,7 @@ using namespace std;
 //v 1.3 *ab*
 void pariu_sportiv_in_trei(float cota_a, float cota_b, float cota_egal, float sum, float &val_a, float &val_egal, float &val_b, float &min_win, float &max_win) {
     short op = 0;
+    val_a = 0, val_egal = 0, val_b = 0, min_win = 0, max_win = 0;
     for (float i = 10; i>0; i=i-0.1) {
         for (float j = 10-i; j>0; j=j-0.1) {
             float f = 10 - i - j;
@@ -37,19 +38,25 @@ void pariu_sportiv_in_trei(float cota_a, float cota_b, float cota_egal, float su
             }
         }
     }
+    min_win = sum / 10 * min_win;
+    max_win = sum / 10 * max_win;
     if (op==0 || min_win < 0.5) cout << "Not worth it man" << endl;
     else if (op==1) {
+        val_a = sum / 10 * val_a;
+        val_egal = sum / 10 * val_egal;
+        val_b = sum / 10 * val_b;
         cout << "Bet rentabil după cum urmeaza:" << endl;
-        cout << "Pe echipa A: " << sum / 10 * val_a << endl;
-        cout << "Pe egal: " << sum / 10 * val_egal << endl;
-        cout << "Pe echipa B: " << sum / 10 * val_b << endl;
-        cout << "Castig maxim: " << sum / 10 * max_win << endl;
-        cout << "Castig minim: " << sum / 10 * min_win << endl;
+        cout << "Pe echipa A: " << val_a << endl;
+        cout << "Pe egal: " << val_egal << endl;
+        cout << "Pe echipa B: " << val_b << endl;
+        cout << "Castig maxim: " << max_win << endl;
+        cout << "Castig minim: " << min_win << endl;
         cout << endl;
     }
 }
 
 void pariu_sportiv_simplu(float cota_a, float cota_b, float sum, float &val_a, float &val_b, float &min_win, float &max_win) {
+    val_a = 0; val_b=0; min_win=0; max_win=0;
     short op = 0;
     for (float i = 10; i>0; i=i-0.1) {
         float j = 10 - i;
@@ -70,13 +77,17 @@ void pariu_sportiv_simplu(float cota_a, float cota_b, float sum, float &val_a, f
             op=1;
         }
     }
+    min_win = sum/10*min_win;
+    max_win = sum/10*max_win;
     if (op==0 || min_win < 0.5) cout << "Not worth it man" << endl;
     else if (op==1) {
+        val_a = sum / 10 * val_a;
+        val_b = sum / 10 * val_b;
         cout << "Bet rentabil după cum urmeaza:" << endl;
-        cout << "Pe echipa A: " << sum / 10 * val_a << endl;
-        cout << "Pe echipa B: " << sum / 10 * val_b << endl;
-        cout << "Castig maxim: " << sum / 10 * max_win << endl;
-        cout << "Castig minim: " << sum / 10 * min_win << endl;
+        cout << "Pe echipa A: " << val_a << endl;
+        cout << "Pe echipa B: " << val_b << endl;
+        cout << "Castig maxim: " << max_win << endl;
+        cout << "Castig minim: " << min_win << endl;
         cout << endl;
     }
 }
@@ -99,11 +110,11 @@ int main () {
             fstream file_output_information;
             file_output_information.open("Pariu_Sportiv.txt", fstream::app);
             file_output_information << "Informatii despre pariu:" << endl;
-            file_output_information << "Cota 1: " << cota_a << " -> valoare: " << sum / 10 * val_a << endl;
-            if (cota_egal!=-1) file_output_information << "Cota egal: " << cota_egal << " -> valoare: " << sum / 10 * val_egal << endl;
-            file_output_information << "Cota 2: " << cota_b << " -> valoare: " << sum / 10 * val_b << endl;
-            file_output_information << "Castig maxim: " << sum / 10 * max_win << endl;
-            file_output_information << "Castig minim: " << sum / 10 * min_win << endl;
+            file_output_information << "Cota 1: " << cota_a << " -> valoare: " << val_a << endl;
+            if (cota_egal!=-1) file_output_information << "Cota egal: " << cota_egal << " -> valoare: " << val_egal << endl;
+            file_output_information << "Cota 2: " << cota_b << " -> valoare: " << val_b << endl;
+            file_output_information << "Castig maxim: " << max_win << endl;
+            file_output_information << "Castig minim: " << min_win << endl;
             file_output_information.close();
             cout << "Salvat!" << endl << endl;
         }
