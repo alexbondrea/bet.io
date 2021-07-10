@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
-//v 1.4 *ab*
+//v 1.41 *ab*
 void order(float &a, float &b) {
     if (b < a) {
         a = a + b;
@@ -10,81 +10,67 @@ void order(float &a, float &b) {
     }
 }
 void pariu_sportiv_simplu(float cota_a, float cota_b, float sum, float &val_a, float &val_b, float &min_win, float &max_win) {
-    val_a = 0; val_b=0; min_win=0; max_win=0;
+    val_a = val_b = min_win = max_win = 0;
     bool op = 0;
-    for (float i = 10; i>0; i=i-0.1) {
+    for (float i = 10; i > 0; i -= 0.1) {
         float j = 10 - i;
-        if (i+j==10 && i*cota_a>10 && j*cota_b>10) {
-            float a = i*cota_a;
-            float b = j*cota_b;
+        if (i + j == 10 && i * cota_a > 10 && j * cota_b > 10) {
+            float a = i * cota_a;
+            float b = j * cota_b;
             order (a, b);
-            if (min_win<a-10) {
-                min_win=a-10;
-                max_win=b-10;
-                val_a=i;
-                val_b=j;
+            if (min_win < a - 10) {
+                min_win = a - 10;
+                max_win = b - 10;
+                val_a = i; val_b = j;
             }
-            op=1;
+            op = 1;
         }
     }
-    min_win = sum/10*min_win;
-    max_win = sum/10*max_win;
-    if (op==0 || min_win < 0.5) cout << "Not worth it man" << endl;
-    else if (op==1) {
-        val_a = sum / 10 * val_a;
-        val_b = sum / 10 * val_b;
+    min_win *= sum / 10; max_win *= sum / 10;
+    if (op == 0 || min_win < 0.5) cout << "Not worth it man" << endl;
+    else if (op == 1) {
+        val_a *= sum / 10; val_b *= sum / 10;
         cout << "Bet rentabil după cum urmeaza:" << endl;
         cout << "Pe echipa A: " << val_a << endl;
         cout << "Pe echipa B: " << val_b << endl;
         cout << "Castig maxim: " << max_win << endl;
-        cout << "Castig minim: " << min_win << endl;
-        cout << endl;
+        cout << "Castig minim: " << min_win << endl << endl;
     }
 }
 void pariu_sportiv_in_trei(float cota_a, float cota_b, float cota_egal, float sum, float &val_a, float &val_egal, float &val_b, float &min_win, float &max_win) {
     bool op = 0;
-    val_a = 0, val_egal = 0, val_b = 0, min_win = 0, max_win = 0;
-    for (float i = 10; i>0; i=i-0.1) {
-        for (float j = 10-i; j>0; j=j-0.1) {
+    val_a = val_egal = val_b = min_win = max_win = 0;
+    for (float i = 10; i > 0; i -= 0.1) {
+        for (float j = 10 - i; j > 0; j -= 0.1) {
             float f = 10 - i - j;
-            if (i+j+f == 10 && i*cota_egal > 10 && j*cota_a > 10 && f*cota_b > 10) {
+            if (i + j + f == 10 && i * cota_egal > 10 && j * cota_a > 10 && f * cota_b > 10) {
                 float a = i * cota_egal;
                 float b = j * cota_a;
                 float c = f * cota_b;
-                order (a, b);
-                order (b, c);
-                order (a, b);
+                order (a, b); order (b, c); order (a, b);
                 if (min_win < a - 10) {
                     min_win = a - 10;
                     max_win = c - 10;
-                    val_a = j;
-                    val_egal = i;
-                    val_b = f;
+                    val_a = j; val_egal = i; val_b = f;
                 }
-                op=1;
+                op = 1;
             }
         }
     }
-    min_win = sum / 10 * min_win;
-    max_win = sum / 10 * max_win;
-    if (op==0 || min_win < 0.5) cout << "Not worth it man" << endl;
-    else if (op==1) {
-        val_a = sum / 10 * val_a;
-        val_egal = sum / 10 * val_egal;
-        val_b = sum / 10 * val_b;
+    min_win *= sum / 10; max_win *= sum / 10;
+    if (op == 0 || min_win < 0.5) cout << "Not worth it man" << endl;
+    else if (op == 1) {
+        val_a *= sum / 10; val_egal *= sum / 10; val_b *= sum / 10;
         cout << "Bet rentabil după cum urmeaza:" << endl;
         cout << "Pe echipa A: " << val_a << endl;
         cout << "Pe egal: " << val_egal << endl;
         cout << "Pe echipa B: " << val_b << endl;
         cout << "Castig maxim: " << max_win << endl;
-        cout << "Castig minim: " << min_win << endl;
-        cout << endl;
+        cout << "Castig minim: " << min_win << endl << endl;
     }
 }
 int main () {
-    float cota_a, cota_egal, cota_b, sum;
-    float max_win, val_a, val_b, val_egal;
-    float min_win = 0;
+    float cota_a, cota_egal, cota_b, sum, max_win, val_a, val_b, val_egal, min_win = 0;
     char option;
     do {
         cout << "***************************************************************" << endl;
@@ -95,7 +81,7 @@ int main () {
         if (cota_egal!=-1) pariu_sportiv_in_trei(cota_a, cota_b, cota_egal, sum, val_a, val_egal, val_b, min_win, max_win);
         else pariu_sportiv_simplu(cota_a, cota_b, sum, val_a, val_b, min_win, max_win);
         cout << "Salvezi aceste informatii? (y/n) "; cin >> option; cout << endl;
-        if (option=='y'||option=='Y') {
+        if (option == 'y'||option == 'Y') {
             fstream file_output_information;
             file_output_information.open("Pariu_Sportiv.txt", fstream::app);
             file_output_information << "Informatii despre pariu:" << endl;
@@ -108,5 +94,5 @@ int main () {
             cout << "Salvat!" << endl << endl;
         }
         cout << "Doresti sa continui? (y/n) "; cin >> option; cout << endl;
-    } while (option=='y' || option=='Y');
+    } while (option == 'y' || option == 'Y');
 }
